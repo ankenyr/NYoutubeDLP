@@ -135,7 +135,7 @@ namespace NYoutubeDL
         /// <summary>
         ///     The path to the youtube-dl binary
         /// </summary>
-        public string YoutubeDlPath { get; set; } = new FileInfo("youtube-dl").GetFullPath();
+        public string YoutubeDlPath { get; set; } = new FileInfo("yt-dlp").GetFullPath();
 
         /// <summary>
         ///     Whether this youtubedl client should retrieve all info

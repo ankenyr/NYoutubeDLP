@@ -79,6 +79,8 @@ namespace NYoutubeDL.Options
 
         [Option] internal readonly BoolOption writePages = new BoolOption("--write-pages");
 
+        [Option] internal readonly StringOption printField = new StringOption("--print");
+
         /// <summary>
         ///     -C
         /// </summary>
@@ -293,6 +295,15 @@ namespace NYoutubeDL.Options
         {
             get => this.writePages.Value ?? false;
             set => this.SetField(ref this.writePages.Value, value);
+        }
+
+        /// <summary>
+        ///     --print
+        /// </summary>
+        public string PrintField
+        {
+            get => this.printField.Value;
+            set => this.SetField(ref this.printField.Value, value);
         }
     }
 }

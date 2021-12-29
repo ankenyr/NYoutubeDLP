@@ -23,6 +23,7 @@ namespace NYoutubeDL.Sample
     #region Using
 
     using System;
+    using System.Collections.Generic;
     using Helpers;
     using NYoutubeDL.Models;
     using Options;
@@ -33,42 +34,18 @@ namespace NYoutubeDL.Sample
     {
         public static void Main(string[] args)
         {
-            YoutubeDL ydlClient = new YoutubeDL();
+            YoutubeDL ytd = new YoutubeDL();
+            ytd.Options.GeneralOptions.FlatPlaylist = true;
+            ytd.Options.VideoSelectionOptions.PlaylistItems = "1";
+            ytd.Options.VerbositySimulationOptions.PrintField = "url";
+            var foo = ytd.Options.VideoSelectionOptions.ToCliParameters();
+            var bar = ytd.Options.VerbositySimulationOptions.ToCliParameters();
+            ytd.StandardErrorEvent += (sender, error) => Console.WriteLine(error);
+            ytd.StandardOutputEvent += (sender, output) => Console.WriteLine(output);
 
-            ydlClient.Options.DownloadOptions.FragmentRetries = -1;
-            ydlClient.Options.DownloadOptions.Retries = -1;
-            ydlClient.Options.VideoFormatOptions.Format = Enums.VideoFormat.best;
-            ydlClient.Options.PostProcessingOptions.AudioFormat = Enums.AudioFormat.best;
-            ydlClient.Options.PostProcessingOptions.AudioQuality = "0";
+            Console.WriteLine("\n\n\n");
+            ytd.Download("https://www.youtube.com/results?search_query=critical+breakdown&sp=EgIQAg%253D%253D");
 
-            string options = ydlClient.Options.Serialize();
-            ydlClient.Options = Options.Deserialize(options);
-
-            ydlClient.StandardErrorEvent += (sender, error) => Console.WriteLine(error);
-            ydlClient.StandardOutputEvent += (sender, output) => Console.WriteLine(output);
-
-            ydlClient.Info.PropertyChanged += (sender, e) =>
-            {
-                DownloadInfo info = (DownloadInfo)sender;
-                var propertyValue = info.GetType().GetProperty(e.PropertyName).GetValue(info);
-
-                switch (e.PropertyName)
-                {
-                    case "VideoProgress":
-                        Console.WriteLine($" > Video Progress: {propertyValue}%");
-                        break;
-                    case "Status":
-                        Console.WriteLine($" > Status: {propertyValue}");
-                        break;
-                    case "DownloadRate":
-                        Console.WriteLine($" > Download Rate: {propertyValue}");
-                        break;
-                    default:
-                        break;
-                }
-            };
-
-            ydlClient.Download("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
         }
     }
 }
