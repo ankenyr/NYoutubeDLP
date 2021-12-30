@@ -175,7 +175,7 @@ namespace NYoutubeDL.Services
             ydl.downloadProcessID = ydl.process.Id;
         }
 
-        private static void Cancel(YoutubeDL ydl, int count = 0)
+        private static void Cancel(YoutubeDL ydl)
         {
             try
             {
