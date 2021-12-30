@@ -38,11 +38,8 @@ namespace NYoutubeDL.Sample
             ytd.Options.GeneralOptions.FlatPlaylist = true;
             ytd.Options.VideoSelectionOptions.PlaylistItems = "1";
             ytd.Options.VerbositySimulationOptions.PrintField = "url";
-            var foo = ytd.Options.VideoSelectionOptions.ToCliParameters();
-            var bar = ytd.Options.VerbositySimulationOptions.ToCliParameters();
             ytd.StandardErrorEvent += (sender, error) => Console.WriteLine(error);
             ytd.StandardOutputEvent += (sender, output) => Console.WriteLine(output);
-
             Console.WriteLine("\n\n\n");
             ytd.Download("https://www.youtube.com/results?search_query=critical+breakdown&sp=EgIQAg%253D%253D");
 

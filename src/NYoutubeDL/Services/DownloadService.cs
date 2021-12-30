@@ -56,19 +56,6 @@ namespace NYoutubeDL.Services
                 ydl.IsDownloading = true;
             }
 
-            if (ydl.processStartInfo == null)
-            {
-                ydl.isGettingInfo = true;
-                await PreparationService.PrepareDownloadAsync(ydl, cancellationToken);
-
-                if (ydl.processStartInfo == null)
-                {
-                    throw new NullReferenceException();
-                }
-
-                ydl.isGettingInfo = false;
-            }
-
             SetupDownload(ydl, cancellationToken);
 
             await ydl.process?.WaitForExitAsync(cancellationToken);
@@ -99,19 +86,6 @@ namespace NYoutubeDL.Services
             if (!ydl.isGettingInfo)
             {
                 ydl.IsDownloading = true;
-            }
-
-            if (ydl.processStartInfo == null)
-            {
-                ydl.isGettingInfo = true;
-                PreparationService.PrepareDownload(ydl, cancellationToken);
-
-                if (ydl.processStartInfo == null)
-                {
-                    throw new NullReferenceException();
-                }
-
-                ydl.isGettingInfo = false;
             }
 
             SetupDownload(ydl, cancellationToken);
@@ -167,7 +141,16 @@ namespace NYoutubeDL.Services
             {
                 return;
             }
-
+            string arguments = ydl.Options.ToCliParameters() + " " + ydl.VideoUrl;
+            ydl.processStartInfo = new ProcessStartInfo
+            {
+                FileName = ydl.YoutubeDlPath,
+                Arguments = arguments,
+                CreateNoWindow = true,
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+                UseShellExecute = false
+            };
             ydl.process = new Process { StartInfo = ydl.processStartInfo, EnableRaisingEvents = true };
 
             ydl.stdOutputTokenSource = new CancellationTokenSource();
